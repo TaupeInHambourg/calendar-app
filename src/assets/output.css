@@ -554,16 +554,15 @@ video {
   display: none;
 }
 
-.bg-rainbow-melon {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 173 173 / var(--tw-bg-opacity, 1));
+.static {
+  position: static;
 }
 
-.text-center {
-  text-align: center;
+.font-sans {
+  font-family: Graphik, sans-serif;
 }
 
-.text-4xl {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
+.text-rainbow-melon {
+  --tw-text-opacity: 1;
+  color: rgb(255 173 173 / var(--tw-text-opacity, 1));
 }

@@ -1,0 +1,18 @@
+{
+    "name": "audrey/calendar-app",
+    "autoload": {
+        "psr-4": {
+            "audrey\\CalendarApp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Audrey Norvez",
+            "email": "audrey.norvez@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "7.9.2",
+        "symfony/var-dumper": "^7.2"
+    }
+}
