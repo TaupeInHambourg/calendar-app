@@ -2,8 +2,8 @@
 
 namespace audrey\CalendarApp\Controller;
 
-use audrey\CalendarApp\View\Layout\Header;
-use audrey\CalendarApp\View\Layout\Footer;
+use audrey\CalendarApp\View\Component\Header;
+use audrey\CalendarApp\View\Component\Footer;
 use audrey\CalendarApp\View\Partial\SingleCalendar;
 
 use audrey\CalendarApp\Model\GradeModel;

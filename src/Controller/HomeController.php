@@ -4,8 +4,8 @@ namespace audrey\CalendarApp\Controller;
 
 use audrey\CalendarApp\Model\SingleView;
 use audrey\CalendarApp\View\Partial\Home;
-use audrey\CalendarApp\View\Layout\Header;
-use audrey\CalendarApp\View\Layout\Footer;
+use audrey\CalendarApp\View\Component\Header;
+use audrey\CalendarApp\View\Component\Footer;
 
 class HomeController
 {
