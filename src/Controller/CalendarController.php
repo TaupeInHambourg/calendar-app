@@ -8,6 +8,7 @@ use audrey\CalendarApp\View\Partial\SingleCalendar;
 
 use audrey\CalendarApp\Model\GradeModel;
 use audrey\CalendarApp\Model\LessonModel;
+use audrey\CalendarApp\Model\ModuleModel;
 
 class CalendarController
 {
@@ -24,10 +25,11 @@ class CalendarController
         $footer = new Footer();
         $grades = GradeModel::getGrades();
         $lessons = LessonModel::getLessons();
+        $modules = ModuleModel::getModuleByClasse(8);
 
         return
             $header->render() .
-            $view->render($grades, $lessons) .
+            $view->render($grades, $lessons, $modules) .
             $footer->render();
     }
 

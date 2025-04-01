@@ -13,9 +13,7 @@ class Header
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-            <link href="localhost:5001/src/assets/output.css" rel="stylesheet">
-            <link href="../assets/css/styles.css" rel="stylesheet">
+            <link href="../dist/styles.css" rel="stylesheet">
             <title>CalendarApp</title>
             <style>
                 .menu-item:hover {
@@ -44,7 +42,7 @@ class Header
 
         <body>
             <div class="menu">
-                <div class="menu-item">Home</div>
+                <div class="menu-item"><a href="/calendar">Home</a></div>
                 <div class="menu-item">Classes</div>
                 <div class="menu-item">Formateurs</div>
                 <div class="menu-item">Modules</div>

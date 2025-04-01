@@ -7,7 +7,7 @@ use audrey\CalendarApp\View\Component\ModuleComponent;
 
 class SingleCalendar
 {
-    public static function render($grades, $lessons)
+    public static function render($grades, $lessons, $modules)
     {
         $currentMonth = isset($_GET['month']) ? intval($_GET['month']) : date('n');
         $currentYear = isset($_GET['year']) ? intval($_GET['year']) : date('Y');
@@ -40,7 +40,9 @@ class SingleCalendar
         ];
         $monthName = $months[$currentMonth];
 
-        $modules = [
+
+        // dump($modules);
+        $modules_test = [
             ['name' => 'Développement SQL - noSQL', 'attributed' => 2, 'allowed' => 2, 'color' => '#f87171'],
             ['name' => 'Framework CSS', 'attributed' => 0, 'allowed' => 2, 'color' => '#fbbf24'],
             ['name' => 'Framework CSS', 'attributed' => 2, 'allowed' => 1, 'color' => '#34d399'],
@@ -48,6 +50,7 @@ class SingleCalendar
             ['name' => 'Framework CSS', 'attributed' => 2, 'allowed' => 1, 'color' => '#34d399'],
             ['name' => 'Framework CSS', 'attributed' => 2, 'allowed' => 1, 'color' => '#34d399'],
         ];
+        // dump($modules_test);
 
         $weekNumbers = [];
         for ($day = 1; $day <= $daysInMonth; $day++) {
@@ -119,7 +122,7 @@ class SingleCalendar
                             </div>
                             <div class="event-list p-1 mt-2 bg-gray-100 rounded-lg overflow-y-auto min-h-fit">
                                 <?php foreach ($events as $event): ?>
-                                    <div class="text-sm bg-[<?= LessonModel::getLessonModule($event->id)[0]->color; ?>] rounded p-1 mt-1">
+                                    <div class="text-sm bg-[<?= LessonModel::getLessonColor($event->id)[0]->color; ?>] rounded p-1 mt-1">
                                         <?= htmlspecialchars($event->name) ?>
                                     </div>
                                 <?php endforeach; ?>
@@ -131,7 +134,7 @@ class SingleCalendar
                     <?php
                     $endDay = (new \DateTime("$currentYear-$currentMonth-$daysInMonth"))->format('N') - 1;
                     for ($i = $endDay; $i < 5; $i++) {
-                        echo '<div class="min-h-fit bg-gray-200 rounded-lg"></div>';
+                        echo '<div class="min-h-fit bg-bone-200 rounded-lg"></div>';
                     }
                     ?>
                 </div>
@@ -151,14 +154,16 @@ class SingleCalendar
                 </div>
             </div>
 
-            <div id="modules" class="hidden mt-6">
-                <?php ModuleComponent::render($modules); ?>
+            <div id="modules_section" class="hidden mt-6 bg-bone-50 p-4 rounded">
+                <?php
+                ModuleComponent::render($modules);
+                ?>
             </div>
         </div>
 
         <script>
             function toggleModules() {
-                const modules = document.getElementById('modules');
+                const modules = document.getElementById('modules_section');
                 modules.classList.toggle('hidden');
             }
         </script>
