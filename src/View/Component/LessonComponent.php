@@ -9,8 +9,10 @@ class LessonComponent
     public static function render($lesson)
     { ?>
 
-        <div class="text-sm bg-[<?= LessonModel::getLessonColor($lesson->id)[0]->color; ?>] rounded p-1 mt-1">
-            <?= htmlspecialchars($lesson->name) ?>
+        <div class="event-list p-1 mt-2 rounded-lg overflow-y-auto min-h-fit" style="background-color: <?php echo LessonModel::getLessonColor($lesson->id)[0]->color ?>;">
+            <div class="text-sm rounded p-1 mt-1">
+                <?= htmlspecialchars($lesson->name) ?>
+            </div>
         </div>
 
 <?php }

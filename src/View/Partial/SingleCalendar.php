@@ -3,6 +3,7 @@
 namespace audrey\CalendarApp\View\Partial;
 
 use audrey\CalendarApp\Model\LessonModel;
+use audrey\CalendarApp\View\Component\LessonComponent;
 use audrey\CalendarApp\View\Component\ModuleComponent;
 
 class SingleCalendar
@@ -74,10 +75,10 @@ class SingleCalendar
 ?>
         <div class="container mx-auto p-6">
             <div class="flex justify-between items-center">
-                <a href="?month=<?= $currentMonth - 1 ?>&year=<?= $currentYear ?>" class="px-4 py-2 bg-gray-300 rounded-lg text-lg">Précédent</a>
+                <a href="?month=<?= $currentMonth - 1 ?>&year=<?= $currentYear ?>" class="px-4 py-2 bg-bone-300 rounded-lg text-lg">Précédent</a>
                 <h2 class="text-2xl font-bold"><?= $monthName . ' ' . $currentYear ?></h2>
-                <a href="?month=<?= $currentMonth + 1 ?>&year=<?= $currentYear ?>" class="px-4 py-2 bg-gray-300 rounded-lg text-lg">Suivant</a>
-                <button onclick="toggleModules()" class="px-4 py-2 bg-gray-300 rounded-lg text-lg">👁️</button>
+                <a href="?month=<?= $currentMonth + 1 ?>&year=<?= $currentYear ?>" class="px-4 py-2 bg-bone-300 rounded-lg text-lg">Suivant</a>
+                <button onclick="toggleModules()" class="px-4 py-2 bg-bone-300 rounded-lg text-lg">👁️</button>
             </div>
 
             <div class="flex mt-6">
@@ -91,7 +92,7 @@ class SingleCalendar
 
                     <!-- Grey out days before the first day of the month -->
                     <?php for ($i = 0; $i < $startDay; $i++): ?>
-                        <div class="min-h-fit bg-gray-200 rounded-lg"></div>
+                        <div class="min-h-fit bg-bone-50 rounded-lg"></div>
                     <?php endfor; ?>
 
                     <?php for ($day = 1; $day <= $daysInMonth; $day++): ?>
@@ -116,17 +117,13 @@ class SingleCalendar
                             continue;
                         }
                         ?>
-                        <div class="min-h-fit bg-white rounded-lg relative p-2 hover:bg-gray-100">
+                        <div class="min-h-fit bg-bone-50 rounded-lg relative p-2 hover:bg-bone-100">
                             <div class="font-semibold text-center">
                                 <?= $day ?>
                             </div>
-                            <div class="event-list p-1 mt-2 bg-gray-100 rounded-lg overflow-y-auto min-h-fit">
-                                <?php foreach ($events as $event): ?>
-                                    <div class="text-sm bg-[<?= LessonModel::getLessonColor($event->id)[0]->color; ?>] rounded p-1 mt-1">
-                                        <?= htmlspecialchars($event->name) ?>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
+                            <?php foreach ($events as $event)
+                                LessonComponent::render($event);
+                            ?>
                         </div>
                     <?php endfor; ?>
 

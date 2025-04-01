@@ -34,4 +34,6 @@ class ModuleModel
         $result = $stmt->fetchAll(PDO::FETCH_CLASS, 'audrey\CalendarApp\Model\ModuleModel');
         return $result;
     }
+
+    public static function addModule($class, $session, $name, $description, $duration, $hours_attributed, $hours_allowed, $color, $is_option) {}
 }
