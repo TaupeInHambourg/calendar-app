@@ -21,16 +21,17 @@ class LessonModel
         return $result;
     }
 
-    public static function getLessonModule($idLesson)
+    public static function getLessonColor($idLesson)
     {
         $db = Database::connectPDO();
         $query = "SELECT color
         FROM module
         INNER JOIN lesson
         ON lesson.id_module = module.id
-        WHERE lesson.id = $idLesson;
+        WHERE lesson.id = ?;
         ";
         $stmt = $db->prepare($query);
+        $stmt->bindParam(1, $idLesson, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_CLASS, 'audrey\CalendarApp\Model\LessonModel');
         return $result;
