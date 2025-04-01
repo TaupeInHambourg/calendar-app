@@ -9,7 +9,6 @@ use audrey\CalendarApp\Utility\Database;
 
 class LessonModel
 {
-    // TODO: Pensez à bind params
 
     public static function getLessons()
     {
@@ -37,10 +36,22 @@ class LessonModel
         return $result;
     }
 
-    // TODO: function pour ajouter des lessons
-    // public static function addLesson($date_start, $date_end, $name) {
-    //     $db = Database::connectPDO();
-    //     $query = "INSERT INTO lesson";
-    // }
+    public static function addLesson($name, $is_hp, $date_start, $date_end)
+    {
+        $db = Database::connectPDO();
+        $query =
+            "INSERT INTO lesson ('name', 'is_hp', 'date_start', 'date_end')
+        VALUES (?, ?, ?, ?)
+        ";
+        $stmt = $db->prepare($query);
 
+        //TODO: Gestion des param null
+        $stmt->bindParam(1, $name, PDO::PARAM_STR);
+        $stmt->bindParam(2, $is_hp, PDO::PARAM_BOOL);
+        $stmt->bindParam(3, $date_start, PDO::PARAM_STR);
+        $stmt->bindParam(4, $date_end, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_CLASS, 'audrey\CalendarApp\Model\LessonModel');
+        return $result;
+    }
 }

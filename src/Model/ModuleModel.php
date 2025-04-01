@@ -35,5 +35,6 @@ class ModuleModel
         return $result;
     }
 
+    // TODO: addModule
     public static function addModule($class, $session, $name, $description, $duration, $hours_attributed, $hours_allowed, $color, $is_option) {}
 }
