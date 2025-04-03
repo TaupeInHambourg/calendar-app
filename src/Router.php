@@ -31,7 +31,6 @@ class Router
         $method = $_SERVER['REQUEST_METHOD'];
         $resource = $base_uri['path'];
 
-
         $isRoute = isset(self::ROUTES[$method][$resource]);
 
         if (!$isRoute) {
