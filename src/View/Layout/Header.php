@@ -1,6 +1,6 @@
 <?php
 
-namespace audrey\CalendarApp\View\Component;
+namespace audrey\CalendarApp\View\Layout;
 
 class Header
 {
@@ -37,17 +37,19 @@ class Header
         </head>
 
         <body>
-            <div class="bg-fjord-400 text-bone-50 min-h-full w-48 fixed p-5 flex justify-around flex-col">
-                <div class="menu-item"><a href="/calendar">Home</a></div>
-                <div>
-                    <div class="menu-item">Classes</div>
-                    <div class="menu-item">Formateurs</div>
-                    <div class="menu-item">Modules</div>
-                    <div class="menu-item">Année</div>
-                </div>
-                <div>
-                    <div class="menu-item">Profil</div>
-                    <div class="menu-item">Déconnexion</div>
+            <div class="min-h-full fixed flex items-center">
+                <div class="bg-fjord-400 text-bone-50 h-vh-80 w-48 fixed p-5 flex justify-around flex-col rounded-r-2xl">
+                    <div class="menu-item"><a href="/">Home</a></div>
+                    <div>
+                        <div class="menu-item">Classes</div>
+                        <div class="menu-item">Formateurs</div>
+                        <div class="menu-item">Modules</div>
+                        <div class="menu-item">Année</div>
+                    </div>
+                    <div>
+                        <div class="menu-item">Profil</div>
+                        <div class="menu-item">Déconnexion</div>
+                    </div>
                 </div>
             </div>
             <div class="content" style="margin-left: 220px; padding: 20px;">

@@ -2,14 +2,16 @@
 
 namespace audrey\CalendarApp\View\Partial;
 
-use audrey\CalendarApp\Model\LessonModel;
 use audrey\CalendarApp\View\Component\LessonComponent;
 use audrey\CalendarApp\View\Component\ModuleComponent;
+use audrey\CalendarApp\View\Component\ButtonComponent;
+use audrey\CalendarApp\View\Modal\CreateLessonModal;
 
-class SingleCalendar
+class HomeView
 {
     public static function render($grades, $lessons, $modules)
     {
+        CreateLessonModal::render();
         $currentMonth = isset($_GET['month']) ? intval($_GET['month']) : date('n');
         $currentYear = isset($_GET['year']) ? intval($_GET['year']) : date('Y');
 
@@ -64,9 +66,9 @@ class SingleCalendar
         <div class="container flex justify-between min-w-full">
             <div class="w-11/12">
                 <div class="flex justify-between items-center my-8">
-                    <a href="?month=<?= $currentMonth - 1 ?>&year=<?= $currentYear ?>" class="px-4 py-2 bg-fjord-400 text-bone-50 rounded-lg text-lg hover:bg-fjord-500">Précédent</a>
+                    <?php ButtonComponent::render('Précédent', "?month=" . $currentMonth - 1 . "&year=" . $currentYear, null, null, null); ?>
                     <h2 class="text-2xl font-bold"><?= $monthName . ' ' . $currentYear ?></h2>
-                    <a href="?month=<?= $currentMonth + 1 ?>&year=<?= $currentYear ?>" class="px-4 py-2 bg-fjord-400 text-bone-50 rounded-lg text-lg hover:bg-fjord-500">Suivant</a>
+                    <?php ButtonComponent::render('Suivant', "?month=" . $currentMonth + 1 . "&year=" . $currentYear, null, null, null); ?>
                 </div>
 
                 <div class="flex pt-8">
@@ -152,35 +154,7 @@ class SingleCalendar
             </div>
         </div>
 
-        <script>
-            function toggleModules(button) {
-                const modules = document.getElementById('modules_section');
-                modules.classList.toggle('hidden');
 
-                const icon = button.querySelector('#eyeIcon');
-                if (icon.src.includes('eye-opened-fill.svg')) {
-                    icon.src = 'src/assets/icons/eye-closed-outline.svg';
-                } else {
-                    icon.src = 'src/assets/icons/eye-opened-fill.svg';
-                }
-
-                const calendarWrapper = document.querySelector('.container div:first-of-type')
-                if (calendarWrapper.classList.contains('w-11/12')) {
-                    calendarWrapper.classList.replace('w-11/12', 'w-4/5')
-                } else {
-                    calendarWrapper.classList.replace('w-4/5', 'w-11/12')
-                }
-
-                const modulesWrapper = document.querySelector('.container div:last-of-type')
-                if (modulesWrapper.classList.contains('w-fit')) {
-                    modulesWrapper.classList.replace('w-fit', 'w-1/5')
-                } else {
-                    modulesWrapper.classList.replace('w-1/5', 'w-fit')
-                }
-
-
-            }
-        </script>
 <?php
     }
 }

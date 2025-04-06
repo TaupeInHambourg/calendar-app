@@ -10,10 +10,11 @@ class ModuleComponent
     {
 ?>
         <div class="modules">
-
             <?php
             foreach ($modules as $module): ?>
-                <div class="module" style="border: 2px solid <?= $module->color ?>; background-color: <?= $module->hours_attributed == $module->hours_allowed ? 'transparent' : $module->color ?>; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+                <div class="module"
+                    data-module-id="<?= $module->id ?>"
+                    style="border: 2px solid <?= $module->color ?>; background-color: <?= $module->hours_attributed == $module->hours_allowed ? 'transparent' : $module->color ?>; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
                     <div class="module-name"><?= $module->name ?></div>
                     <div class="module-details">
                         <span><?= $module->hours_attributed ?>h attribuées</span>
