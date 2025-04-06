@@ -12,7 +12,9 @@ class Footer
         <p>START-FOOTER</p>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-        <?= $js ? '<script src="../src/assets/js/' . $js . '.js"></script>' : null ?>
+        <?php if ($js): ?>
+            <script type="module" src="../src/assets/js/<?= $js ?>.js"></script>
+        <?php endif; ?>
 
         </body>
 
