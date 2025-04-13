@@ -13,7 +13,7 @@ function getLessonColor(lessonId) {
 }
 
 // Récupère les détails d'une leçon
-function getLessonDetails(lessonId) {
+function getLesson(lessonId) {
   return fetch(`/api/lesson/${lessonId}`)
     .then(response => response.json())
     .catch(error => {
@@ -77,7 +77,7 @@ function handleDragDrop(action, data) {
 // Exporte les fonctions
 export {
   getLessonColor,
-  getLessonDetails,
+  getLesson,
   createLesson,
   updateLesson,
   handleDragDrop

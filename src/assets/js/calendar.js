@@ -4,27 +4,22 @@
 
 import { getLessonColor } from './api.js';
 
-// Affiche une leçon dans le calendrier
 function renderLessonComponent(lesson, container) {
-  // Crée un nouvel élément de leçon
   const lessonElement = document.createElement('div');
   lessonElement.className = 'lesson event-list p-1 mt-2 rounded-lg overflow-y-auto min-h-fit';
   lessonElement.setAttribute('data-lesson-id', lesson.id);
 
-  // Récupère la couleur depuis le serveur
   getLessonColor(lesson.id)
     .then(data => {
       lessonElement.style.backgroundColor = data.color;
     });
 
-  // Ajoute le nom de la leçon
   const lessonName = document.createElement('div');
   lessonName.className = 'text-sm rounded p-1 mt-1';
   lessonName.textContent = lesson.name;
 
   lessonElement.appendChild(lessonName);
 
-  // Remplace le conteneur par le nouvel élément de leçon
   if (container && container.parentNode) {
     container.parentNode.replaceChild(lessonElement, container);
   } else {
@@ -34,7 +29,6 @@ function renderLessonComponent(lesson, container) {
   return lessonElement;
 }
 
-// Fonction pour basculer l'affichage de la section des modules
 function toggleModules(button) {
   const modules = document.getElementById('modules_section');
   modules.classList.toggle('hidden');
@@ -61,7 +55,6 @@ function toggleModules(button) {
   }
 }
 
-// Exporte les fonctions
 export {
   renderLessonComponent,
   toggleModules

@@ -14,7 +14,7 @@ class DragDropController
     try {
       $this->handleDragDrop();
     } catch (\Exception $e) {
-      $this->sendResponse(500, ['error' => 'Internal server error']);
+      $this->sendResponse(500, ['error' => 'Internal server error DnD']);
     }
   }
 
@@ -75,7 +75,6 @@ class DragDropController
     $newLessonId = LessonModel::createLessonFromModule($data['moduleId'], $data['date']);
 
     if ($newLessonId) {
-      // Get the newly created lesson to return to the client
       $lessons = LessonModel::getLessons();
       $newLesson = null;
 
