@@ -10,11 +10,11 @@ class DragDropController
   public function __construct()
   {
     // Ensure this is an AJAX request
-    // header('Content-Type: application/json');
+    header('Content-Type: application/json');
     try {
       $this->handleDragDrop();
     } catch (\Exception $e) {
-      $this->sendResponse(500, ['error' => 'Internal server error DnD']);
+      $this->sendResponse(500, ['error' => 'Internal server error']);
     }
   }
 

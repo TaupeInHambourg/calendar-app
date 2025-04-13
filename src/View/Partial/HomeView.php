@@ -25,7 +25,7 @@ class HomeView
 
         $firstDayOfMonth = new \DateTime("$currentYear-$currentMonth-01");
         $daysInMonth = $firstDayOfMonth->format('t');
-        $startDay = $firstDayOfMonth->format('N') - 1; // 0 for Monday, 1 for Tuesday, etc.
+        $startDay = $firstDayOfMonth->format('N') - 1;
 
         $months = [
             1 => 'Janvier',
