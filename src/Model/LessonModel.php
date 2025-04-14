@@ -21,6 +21,18 @@ class LessonModel
         return $result;
     }
 
+    public static function getLessonById(int $idLesson)
+    {
+        $db = Database::connectPDO();
+        $query = "SELECT id, name, id_module, date_start, date_end 
+                      FROM lesson WHERE id = :id";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':id', $idLesson, \PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $result;
+    }
+
     public static function getLessonColor(int $idLesson)
     {
         $db = Database::connectPDO();

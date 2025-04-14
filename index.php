@@ -13,9 +13,21 @@ $router = new Router();
 
 try {
   $controller = $router->getController();
-  $response = $controller->execute();
-  http_response_code(200);
-  echo $response;
+
+  // Vérifier si le contrôleur est une fonction anonyme ou un objet
+  if ($controller instanceof Closure) {
+    // Cas d'une méthode spécifique comme LessonController::getLesson
+    $response = $controller();
+  } else {
+    // Cas d'un contrôleur standard avec méthode execute()
+    $response = $controller->execute();
+  }
+
+  // Si la réponse n'est pas déjà envoyée (par exemple par header()/echo dans la méthode du contrôleur)
+  if ($response !== null) {
+    http_response_code(200);
+    echo $response;
+  }
 } catch (Exception $e) {
   http_response_code(404);
   echo $e->getMessage();

@@ -4,7 +4,10 @@
 
 // Récupère la couleur d'une leçon
 function getLessonColor(lessonId) {
-  return fetch(`/lesson-color/${lessonId}`)
+  return fetch(`/lesson-color/${lessonId}`, {
+    methode: 'POST',
+  }
+  )
     .then(response => response.json())
     .catch(() => {
       console.error('Erreur lors de la récupération de la couleur');
@@ -14,8 +17,12 @@ function getLessonColor(lessonId) {
 
 // Récupère les détails d'une leçon
 function getLesson(lessonId) {
-  return fetch(`/api/lesson/${lessonId}`)
-    .then(response => response.json())
+  console.log('API', lessonId);
+  fetch(`/api/lessons/${lessonId}`)
+    .then(
+      response => response.json(),
+      console.log('API', response)
+    )
     .catch(error => {
       console.error('Erreur lors de la récupération des détails de la leçon:', error);
       return null;

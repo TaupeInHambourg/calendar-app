@@ -20,6 +20,7 @@ function openLessonModal(lessonId, dateStr) {
     endTimeInput.value = '12:30';
     modal.classList.remove('hidden');
   } else {
+    console.log('MODAL', lessonId);
     getLesson(lessonId)
       .then(data => {
         if (data) {

@@ -29,7 +29,7 @@ function getDateFromCalendarCell(cell) {
 
 // Formate une date en chaîne ISO
 function formatDateTime(date, time) {
-  return `${date} ${time}:00`;
+  return `${date} ${time}`;
 }
 
 // Exporte les fonctions
