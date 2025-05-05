@@ -9,7 +9,7 @@ class Router
     public const ROUTES = [
         "GET" => [
             "/" => "audrey\\CalendarApp\\Controller\\HomeController",
-            "/api/lessons/{id}" => "audrey\\CalendarApp\\Controller\\LessonController::getLesson",
+            "/lesson/{id}" => "audrey\\CalendarApp\\Controller\\LessonController::getLesson",
         ],
         "POST" => [
             "/drag-drop" => "audrey\\CalendarApp\\Controller\\DragDropController",
@@ -17,7 +17,7 @@ class Router
             "/lessons" => "audrey\\CalendarApp\\Controller\\LessonController::createLesson",
         ],
         "PUT" => [
-            "/api/lessons/{id}" => "audrey\\CalendarApp\\Controller\\LessonController::updateLesson",
+            "/lesson/{id}" => "audrey\\CalendarApp\\Controller\\LessonController::updateLesson",
         ]
     ];
 

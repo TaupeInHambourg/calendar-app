@@ -68,17 +68,18 @@ class LessonModel
         return $result;
     }
 
-    public static function updateLessonDate($lessonId, $newDate)
+    public static function updateLessonDate($lessonId, $dateStart, $dateEnd)
     {
         $db = Database::connectPDO();
-        $query = "UPDATE lesson SET date_start = :newDate WHERE id = :lessonId";
+        $query = "UPDATE lesson SET date_start = :dateStart, date_end = :dateEnd WHERE id = :lessonId";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':lessonId', $lessonId, PDO::PARAM_INT);
-        $stmt->bindParam(':newDate', $newDate, PDO::PARAM_STR);
+        $stmt->bindParam(':dateStart', $dateStart, PDO::PARAM_STR);
+        $stmt->bindParam(':dateEnd', $dateEnd, PDO::PARAM_STR);
         return $stmt->execute();
     }
 
-    public static function createLessonFromModule($moduleId, $date)
+    public static function createLessonFromModule($moduleId, $startDate, $endDate)
     {
         $db = Database::connectPDO();
 
@@ -88,11 +89,6 @@ class LessonModel
         $moduleStmt->bindParam(':moduleId', $moduleId, PDO::PARAM_INT);
         $moduleStmt->execute();
         $module = $moduleStmt->fetch(PDO::FETCH_ASSOC);
-
-        // Calculate end date based on duration
-        $startDate = new \DateTime($date);
-        $endDate = clone $startDate;
-        $endDate->modify('+' . $module['duration'] . ' hours');
 
         $startDateStr = $startDate->format('Y-m-d H:i:s');
         $endDateStr = $endDate->format('Y-m-d H:i:s');

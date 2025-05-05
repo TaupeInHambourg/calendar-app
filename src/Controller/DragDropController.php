@@ -28,14 +28,18 @@ class DragDropController
     $data = json_decode(file_get_contents('php://input'), true);
 
     if (!$data) {
+      error_log("Invalid JSON received");
       $this->sendResponse(400, ['error' => 'Invalid JSON']);
       return;
     }
 
     if (!isset($data['action'])) {
+      error_log("Missing action parameter");
       $this->sendResponse(400, ['error' => 'Missing action parameter']);
       return;
     }
+
+    error_log("Action: " . $data['action']);
 
     switch ($data['action']) {
       case 'moveLesson':
@@ -45,6 +49,7 @@ class DragDropController
         $this->createLesson($data);
         break;
       default:
+        error_log("Invalid action: " . $data['action']);
         $this->sendResponse(400, ['error' => 'Invalid action']);
     }
   }
@@ -70,7 +75,7 @@ class DragDropController
       return;
     }
 
-    $newLessonId = LessonModel::createLessonFromModule($data['moduleId'], $data['date']);
+    $newLessonId = LessonModel::createLessonFromModule($data['moduleId'], $data['dateStart'], $data['dateEnd']);
 
     if ($newLessonId) {
       $lessons = LessonModel::getLessons();

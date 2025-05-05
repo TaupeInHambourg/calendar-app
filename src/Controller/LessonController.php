@@ -14,10 +14,10 @@ class LessonController
     $lesson = LessonModel::getLessonById($id);
 
     if (!empty($lesson)) {
-      echo json_encode($lesson);
+      return json_encode($lesson);
     } else {
       http_response_code(404);
-      echo json_encode(['error' => 'Lesson not found']);
+      return json_encode(['error' => 'Lesson not found']);
     }
   }
 
@@ -35,40 +35,33 @@ class LessonController
     }
   }
 
-  public function updateLesson($lesson)
+  public function updateLesson()
   {
     header('Content-Type: application/json');
 
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
       http_response_code(405);
-      echo json_encode(['error' => 'Méthode non autorisée']);
+      echo json_encode(['error' => 'Method not allowed']);
       return;
     }
 
     $data = json_decode(file_get_contents('php://input'), true);
 
-    if (!isset($data['dateStart']) || !isset($data['dateEnd'])) {
+    if (!isset($data['idLesson']) || !isset($data['dateStart']) || !isset($data['dateEnd'])) {
       http_response_code(400);
-      echo json_encode(['error' => 'Données manquantes']);
+      echo json_encode(['error' => 'Missing required parameters']);
       return;
     }
 
     try {
-      // Extraction de la date de début pour la méthode updateLessonDate
+      $idLesson = $data['idLesson'];
       $dateStart = new \DateTime($data['dateStart']);
       $formattedDateStart = $dateStart->format('Y-m-d H:i:s');
+      $dateEnd = new \DateTime($data['dateEnd']);
+      $formattedDateEnd = $dateEnd->format('Y-m-d H:i:s');
 
-      // Met à jour la date de début de la leçon
-      $success = LessonModel::updateLessonDate($data['lessonId'], $formattedDateStart);
-
-      // TODO: Implémenter la mise à jour de la date de fin au besoin
-
-      if ($success) {
-        echo json_encode(['success' => true]);
-      } else {
-        http_response_code(500);
-        echo json_encode(['error' => 'Failed to update lesson']);
-      }
+      $response = LessonModel::updateLessonDate(intval($idLesson), $formattedDateStart, $formattedDateEnd);
+      return json_encode($response);
     } catch (\Exception $e) {
       http_response_code(500);
       echo json_encode(['error' => 'Internal server error', 'message' => $e->getMessage()]);
@@ -95,7 +88,7 @@ class LessonController
 
     try {
       // TODO: Implémenter la création d'une leçon à partir d'un module
-      $newLessonId = LessonModel::createLessonFromModule($data['moduleId'], $data['dateStart']);
+      $newLessonId = LessonModel::createLessonFromModule($data['moduleId'], $data['dateStart'], $data['dateEnd']);
 
       if ($newLessonId) {
         $lessons = LessonModel::getLessons();

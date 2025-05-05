@@ -1,5 +1,4 @@
 import { getDateFromCalendarCell } from './utils.js';
-import { renderLessonComponent } from './calendar.js';
 import { openLessonModal } from './modal.js';
 
 function initModulesSortable() {
@@ -61,32 +60,32 @@ function initCalendarSortable() {
           openLessonModal(lessonId, targetDate);
 
           // Mise à jour directe de la date de la leçon
-          fetch('/drag-drop', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              action: 'moveLesson',
-              lessonId: lessonId,
-              newDate: targetDate.dateTimeStr
-            })
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.success) {
-                // Succès silencieux - l'élément est déjà déplacé visuellement
-              } else {
-                console.error('Failed to update lesson:', data.error);
-                // Annuler le déplacement visuel si besoin
-                evt.from.appendChild(item);
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error);
-              // Annuler le déplacement visuel en cas d'erreur
-              evt.from.appendChild(item);
-            });
+          // fetch('/drag-drop', {
+          //   method: 'POST',
+          //   headers: {
+          //     'Content-Type': 'application/json'
+          //   },
+          //   body: JSON.stringify({
+          //     action: 'moveLesson',
+          //     lessonId: lessonId,
+          //     newDate: targetDate.dateTimeStr
+          //   })
+          // })
+          //   .then(response => response.json())
+          //   .then(data => {
+          //     if (data.success) {
+          //       // Succès silencieux - l'élément est déjà déplacé visuellement
+          //     } else {
+          //       console.error('Failed to update lesson:', data.error);
+          //       // Annuler le déplacement visuel si besoin
+          //       evt.from.appendChild(item);
+          //     }
+          //   })
+          //   .catch(error => {
+          //     console.error('Error:', error);
+          //     // Annuler le déplacement visuel en cas d'erreur
+          //     evt.from.appendChild(item);
+          //   });
         }
       }
     });

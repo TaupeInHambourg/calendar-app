@@ -6,7 +6,7 @@ use \audrey\CalendarApp\Router;
 //Définir un gestionnaire global d'exception
 set_exception_handler(function (Throwable $e) {
   http_response_code(500);
-  echo "Oups.";
+  echo json_encode(['error' => 'Internal Server Error', 'message' => $e->getMessage()]);
 });
 
 $router = new Router();

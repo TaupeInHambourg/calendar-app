@@ -7,26 +7,34 @@ function openLessonModal(lessonId, dateStr) {
   const startTimeInput = document.getElementById('start-time');
   const endTimeInput = document.getElementById('end-time');
 
-  lessonIdInput.value = lessonId;
   dateInput.value = dateStr;
 
   if (lessonId.startsWith('new:')) {
-    // Pour un nouveau cours, on met des valeurs par défaut
     startTimeInput.value = '08:30';
     endTimeInput.value = '12:30';
     modal.classList.remove('hidden');
   } else {
-    fetch(`/lesson/${lessonId}`)
+    lessonIdInput.value = lessonId;
+    console.log('Ouverture du modal pour la leçon:', lessonId);
+    console.log('Date:', dateStr);
+
+    fetch(`/lesson/${lessonId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
       .then(response => response.json())
       .then(data => {
         if (data) {
-          const startDateTime = new Date(data.date_start);
-          const endDateTime = new Date(data.date_end);
+          console.log('Détails de la leçon à déplacer:', data);
+          // const startDateTime = new Date(data.date_start);
+          // const endDateTime = new Date(data.date_end);
 
-          startTimeInput.value = startDateTime.getHours().toString().padStart(2, '0') + ':' +
-            startDateTime.getMinutes().toString().padStart(2, '0');
-          endTimeInput.value = endDateTime.getHours().toString().padStart(2, '0') + ':' +
-            endDateTime.getMinutes().toString().padStart(2, '0');
+          // startTimeInput.value = startDateTime.getHours().toString().padStart(2, '0') + ':' +
+          //   startDateTime.getMinutes().toString().padStart(2, '0');
+          // endTimeInput.value = endDateTime.getHours().toString().padStart(2, '0') + ':' +
+          //   endDateTime.getMinutes().toString().padStart(2, '0');
         } else {
           // Valeurs par défaut en cas d'erreur
           startTimeInput.value = '08:30';
@@ -87,12 +95,9 @@ function initModal() {
     });
 
     if (lessonValue.startsWith('new:')) {
-      // Création d'une nouvelle leçon
       const moduleId = lessonValue.split(':')[1];
-
       handleCreateLesson(moduleId, startDateTime, endDateTime);
     } else {
-      // Mise à jour d'une leçon existante
       handleUpdateLesson(lessonValue, startDateTime, endDateTime);
     }
 
@@ -112,7 +117,8 @@ function handleCreateLesson(moduleId, startDateTime, endDateTime) {
     body: JSON.stringify({
       action: 'createLesson',
       moduleId: moduleId,
-      date: startDateTime
+      dateStart: startDateTime,
+      dateEnd: endDateTime
     })
   })
     .then(response => response.json())
@@ -131,17 +137,17 @@ function handleCreateLesson(moduleId, startDateTime, endDateTime) {
 }
 
 function handleUpdateLesson(lessonId, startDateTime, endDateTime) {
-  console.log('Mise à jour de la leçon:', lessonId, startDateTime);
+  console.log('Mise à jour de la leçon:', lessonId, startDateTime, endDateTime);
 
-  fetch('/drag-drop', {
-    method: 'POST',
+  fetch(`/lesson/${lessonId}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      action: 'moveLesson',
-      lessonId: lessonId,
-      newDate: startDateTime
+      idLesson: lessonId,
+      dateStart: startDateTime,
+      dateEnd: endDateTime
     })
   })
     .then(response => response.json())
@@ -153,10 +159,10 @@ function handleUpdateLesson(lessonId, startDateTime, endDateTime) {
         alert('Erreur lors de la mise à jour: ' + (data.error || 'Erreur inconnue'));
       }
     })
-    .catch(error => {
-      console.error('Erreur:', error);
-      alert('Une erreur est survenue lors de la mise à jour de la leçon.');
-    });
+  // .catch(error => {
+  //   console.error('Erreur:', error);
+  //   alert('Une erreur est survenue lors de la mise à jour de la leçon.');
+  // });
 }
 
 export {
