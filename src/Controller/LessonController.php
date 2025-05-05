@@ -6,14 +6,11 @@ use audrey\CalendarApp\Model\LessonModel;
 
 class LessonController
 {
-  // Autres méthodes...
 
   public function getLesson($id)
   {
-    // Définir l'en-tête pour indiquer que la réponse est du JSON
     header('Content-Type: application/json');
 
-    // Récupérer les données de la leçon depuis le modèle
     $lesson = LessonModel::getLessonById($id);
 
     if (!empty($lesson)) {
@@ -24,17 +21,106 @@ class LessonController
     }
   }
 
-  public function getLessonColor($lessonId)
+  public function getLessonColor($lesson)
   {
     header('Content-Type: application/json');
 
-    $color = LessonModel::getLessonColor($lessonId);
+    $color = LessonModel::getLessonColor($lesson);
 
     if (!empty($color)) {
       echo json_encode(['color' => $color[0]->color]);
     } else {
       http_response_code(404);
       echo json_encode(['error' => 'Lesson color not found']);
+    }
+  }
+
+  public function updateLesson($lesson)
+  {
+    header('Content-Type: application/json');
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+      http_response_code(405);
+      echo json_encode(['error' => 'Méthode non autorisée']);
+      return;
+    }
+
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    if (!isset($data['dateStart']) || !isset($data['dateEnd'])) {
+      http_response_code(400);
+      echo json_encode(['error' => 'Données manquantes']);
+      return;
+    }
+
+    try {
+      // Extraction de la date de début pour la méthode updateLessonDate
+      $dateStart = new \DateTime($data['dateStart']);
+      $formattedDateStart = $dateStart->format('Y-m-d H:i:s');
+
+      // Met à jour la date de début de la leçon
+      $success = LessonModel::updateLessonDate($data['lessonId'], $formattedDateStart);
+
+      // TODO: Implémenter la mise à jour de la date de fin au besoin
+
+      if ($success) {
+        echo json_encode(['success' => true]);
+      } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Failed to update lesson']);
+      }
+    } catch (\Exception $e) {
+      http_response_code(500);
+      echo json_encode(['error' => 'Internal server error', 'message' => $e->getMessage()]);
+    }
+  }
+
+  public function createLesson()
+  {
+    header('Content-Type: application/json');
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+      http_response_code(405);
+      echo json_encode(['error' => 'Method not allowed']);
+      return;
+    }
+
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    if (!isset($data['moduleId']) || !isset($data['dateStart']) || !isset($data['dateEnd'])) {
+      http_response_code(400);
+      echo json_encode(['error' => 'Missing required parameters']);
+      return;
+    }
+
+    try {
+      // TODO: Implémenter la création d'une leçon à partir d'un module
+      $newLessonId = LessonModel::createLessonFromModule($data['moduleId'], $data['dateStart']);
+
+      if ($newLessonId) {
+        $lessons = LessonModel::getLessons();
+        $newLesson = null;
+
+        foreach ($lessons as $lesson) {
+          if ($lesson->id == $newLessonId) {
+            $newLesson = $lesson;
+            break;
+          }
+        }
+
+        http_response_code(201);
+        echo json_encode([
+          'success' => true,
+          'id' => $newLessonId,
+          'lesson' => $newLesson
+        ]);
+      } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Failed to create lesson']);
+      }
+    } catch (\Exception $e) {
+      http_response_code(500);
+      echo json_encode(['error' => 'Internal server error', 'message' => $e->getMessage()]);
     }
   }
 }

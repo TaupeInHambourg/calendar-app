@@ -1,17 +1,16 @@
-/**
- * calendar.js - Fonctionnalités du calendrier
- */
-
-import { getLessonColor } from './api.js';
-
 function renderLessonComponent(lesson, container) {
   const lessonElement = document.createElement('div');
   lessonElement.className = 'lesson event-list p-1 mt-2 rounded-lg overflow-y-auto min-h-fit';
   lessonElement.setAttribute('data-lesson-id', lesson.id);
 
-  getLessonColor(lesson.id)
+  fetch(`/lesson-color/${lesson.id}`)
+    .then(response => response.json())
     .then(data => {
       lessonElement.style.backgroundColor = data.color;
+    })
+    .catch(() => {
+      console.error('Erreur lors de la récupération de la couleur');
+      lessonElement.style.backgroundColor = '#3498db'; // Couleur par défaut
     });
 
   const lessonName = document.createElement('div');

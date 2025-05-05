@@ -21,10 +21,9 @@ function getDateFromCalendarCell(cell) {
   const monthNum = getMonthNumber(monthName);
   const paddedDay = day.padStart(2, '0');
 
-  return {
-    dateStr: `${year}-${monthNum}-${paddedDay}`,
-    dateTimeStr: `${year}-${monthNum}-${paddedDay} 09:00:00` // Default to 9 AM
-  };
+  const dateCell = `${year}-${monthNum}-${paddedDay}`;
+
+  return dateCell;
 }
 
 // Formate une date en chaîne ISO

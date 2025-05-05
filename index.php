@@ -16,10 +16,8 @@ try {
 
   // Vérifier si le contrôleur est une fonction anonyme ou un objet
   if ($controller instanceof Closure) {
-    // Cas d'une méthode spécifique comme LessonController::getLesson
     $response = $controller();
   } else {
-    // Cas d'un contrôleur standard avec méthode execute()
     $response = $controller->execute();
   }
 

@@ -56,12 +56,10 @@ class DragDropController
       return;
     }
 
-    $success = LessonModel::updateLessonDate($data['lessonId'], $data['newDate']);
-
-    if ($success) {
-      $this->sendResponse(200, ['success' => true]);
-    } else {
-      $this->sendResponse(500, ['error' => 'Failed to update lesson']);
+    try {
+      $this->handleDragDrop();
+    } catch (\Exception $e) {
+      $this->sendResponse(500, ['error' => 'Internal server error DnD', 'message' => $e->getMessage()]);
     }
   }
 

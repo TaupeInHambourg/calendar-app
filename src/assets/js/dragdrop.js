@@ -1,8 +1,3 @@
-/**
- * dragdrop.js - Gestion du drag & drop avec Sortable
- */
-
-import { handleDragDrop } from './api.js';
 import { getDateFromCalendarCell } from './utils.js';
 import { renderLessonComponent } from './calendar.js';
 import { openLessonModal } from './modal.js';
@@ -37,11 +32,11 @@ function initCalendarSortable() {
       animation: 150,
       onAdd: function (evt) {
         const item = evt.item;
-        const targetDate = getDateFromCalendarCell(evt.to).dateTimeStr;
+        const targetDate = getDateFromCalendarCell(evt.to);
 
         if (item.classList.contains('module-clone')) {
           const moduleId = item.getAttribute('data-dragged-module-id');
-          openLessonModal('new:' + moduleId, targetDate.dateStr);
+          openLessonModal('new:' + moduleId, targetDate);
 
           item.remove();
           // handleDragDrop('createLesson', {
@@ -62,22 +57,36 @@ function initCalendarSortable() {
           //   });
         } else {
           const lessonId = item.getAttribute('data-lesson-id');
-          openLessonModal(lessonId, targetDate.dateStr);
+          const targetDate = getDateFromCalendarCell(evt.to);
+          openLessonModal(lessonId, targetDate);
 
-          // handleDragDrop('moveLesson', {
-          //   lessonId: lessonId,
-          //   newDate: targetDate.dateTimeStr
-          // })
-          //   .then(data => {
-          //     if (data.success) {
-          //       openLessonModal(lessonId, newDate.dateStr);
-          //     } else {
-          //       console.error('Failed to update lesson:', data.error);
-          //     }
-          //   })
-          //   .catch(error => {
-          //     console.error('Error:', error);
-          //   });
+          // Mise à jour directe de la date de la leçon
+          fetch('/drag-drop', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              action: 'moveLesson',
+              lessonId: lessonId,
+              newDate: targetDate.dateTimeStr
+            })
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // Succès silencieux - l'élément est déjà déplacé visuellement
+              } else {
+                console.error('Failed to update lesson:', data.error);
+                // Annuler le déplacement visuel si besoin
+                evt.from.appendChild(item);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              // Annuler le déplacement visuel en cas d'erreur
+              evt.from.appendChild(item);
+            });
         }
       }
     });

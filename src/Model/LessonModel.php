@@ -29,8 +29,8 @@ class LessonModel
         $stmt = $db->prepare($query);
         $stmt->bindParam(':id', $idLesson, \PDO::PARAM_INT);
         $stmt->execute();
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-        return $result;
+        $result = $stmt->fetchAll(PDO::FETCH_CLASS, 'audrey\CalendarApp\Model\LessonModel');
+        return !empty($result) ? $result[0] : null;
     }
 
     public static function getLessonColor(int $idLesson)

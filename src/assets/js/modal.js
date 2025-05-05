@@ -1,8 +1,3 @@
-/**
- * modal.js - Gestion des modales
- */
-
-import { getLesson, createLesson, updateLesson } from './api.js';
 import { formatDateTime } from './utils.js';
 
 function openLessonModal(lessonId, dateStr) {
@@ -16,12 +11,13 @@ function openLessonModal(lessonId, dateStr) {
   dateInput.value = dateStr;
 
   if (lessonId.startsWith('new:')) {
+    // Pour un nouveau cours, on met des valeurs par défaut
     startTimeInput.value = '08:30';
     endTimeInput.value = '12:30';
     modal.classList.remove('hidden');
   } else {
-    console.log('MODAL', lessonId);
-    getLesson(lessonId)
+    fetch(`/lesson/${lessonId}`)
+      .then(response => response.json())
       .then(data => {
         if (data) {
           const startDateTime = new Date(data.date_start);
@@ -36,7 +32,13 @@ function openLessonModal(lessonId, dateStr) {
           startTimeInput.value = '08:30';
           endTimeInput.value = '12:30';
         }
-
+        modal.classList.remove('hidden');
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération des détails de la leçon:', error);
+        // Valeurs par défaut en cas d'erreur
+        startTimeInput.value = '08:30';
+        endTimeInput.value = '12:30';
         modal.classList.remove('hidden');
       });
   }
@@ -78,30 +80,83 @@ function initModal() {
     const startDateTime = formatDateTime(date, startTime);
     const endDateTime = formatDateTime(date, endTime);
 
+    console.log('Données à envoyer:', {
+      lessonValue,
+      startDateTime,
+      endDateTime
+    });
+
     if (lessonValue.startsWith('new:')) {
+      // Création d'une nouvelle leçon
       const moduleId = lessonValue.split(':')[1];
 
-      createLesson(moduleId, startDateTime, endDateTime)
-        .then(() => {
-          window.location.reload();
-        })
-        .catch(error => {
-          console.error('Erreur:', error);
-          alert('Une erreur est survenue lors de la création de la leçon.');
-        });
+      handleCreateLesson(moduleId, startDateTime, endDateTime);
     } else {
-      updateLesson(lessonValue, startDateTime, endDateTime)
-        .then(() => {
-          window.location.reload();
-        })
-        .catch(error => {
-          console.error('Erreur:', error);
-          alert('Une erreur est survenue lors de la mise à jour de la leçon.');
-        });
+      // Mise à jour d'une leçon existante
+      handleUpdateLesson(lessonValue, startDateTime, endDateTime);
     }
 
     modal.classList.add('hidden');
   });
+}
+
+function handleCreateLesson(moduleId, startDateTime, endDateTime) {
+  console.log('Création d\'une nouvelle leçon:', moduleId, startDateTime, endDateTime);
+
+  // Utilisez handleDragDrop pour rester cohérent avec votre architecture
+  fetch('/drag-drop', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      action: 'createLesson',
+      moduleId: moduleId,
+      date: startDateTime
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Réponse création:', data);
+      if (data.success) {
+        window.location.reload();
+      } else {
+        alert('Erreur lors de la création: ' + (data.error || 'Erreur inconnue'));
+      }
+    })
+    .catch(error => {
+      console.error('Erreur:', error);
+      alert('Une erreur est survenue lors de la création de la leçon.');
+    });
+}
+
+function handleUpdateLesson(lessonId, startDateTime, endDateTime) {
+  console.log('Mise à jour de la leçon:', lessonId, startDateTime);
+
+  fetch('/drag-drop', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      action: 'moveLesson',
+      lessonId: lessonId,
+      newDate: startDateTime
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Réponse mise à jour:', data);
+      if (data.success) {
+        window.location.reload();
+      } else {
+        alert('Erreur lors de la mise à jour: ' + (data.error || 'Erreur inconnue'));
+      }
+    })
+    .catch(error => {
+      console.error('Erreur:', error);
+      alert('Une erreur est survenue lors de la mise à jour de la leçon.');
+    });
 }
 
 export {

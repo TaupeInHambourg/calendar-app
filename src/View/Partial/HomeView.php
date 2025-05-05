@@ -107,7 +107,7 @@ class HomeView
                                 continue;
                             }
                             ?>
-                            <div class="calendar min-h-16 bg-bone-50 rounded-lg relative p-2 hover:bg-bone-100">
+                            <div class="calendar min-h-16 bg-bone-50 rounded-lg relative p-2 hover:bg-bone-100" data-date="<?= $eventDateKey ?>">
                                 <div class="day font-semibold text-center">
                                     <?= $day ?>
                                 </div>
