@@ -35,7 +35,7 @@ class LessonController
     }
   }
 
-  public function updateLesson()
+  public function updateLesson($id)
   {
     header('Content-Type: application/json');
 
@@ -47,24 +47,28 @@ class LessonController
 
     $data = json_decode(file_get_contents('php://input'), true);
 
-    if (!isset($data['idLesson']) || !isset($data['dateStart']) || !isset($data['dateEnd'])) {
+    if (!isset($data['dateStart']) || !isset($data['dateEnd'])) {
       http_response_code(400);
       echo json_encode(['error' => 'Missing required parameters']);
       return;
     }
 
     try {
-      $idLesson = $data['idLesson'];
-      $dateStart = new \DateTime($data['dateStart']);
-      $formattedDateStart = $dateStart->format('Y-m-d H:i:s');
-      $dateEnd = new \DateTime($data['dateEnd']);
-      $formattedDateEnd = $dateEnd->format('Y-m-d H:i:s');
+      $idLesson = intval($id);
+      $dateStart = $data['dateStart'];
+      $dateEnd = $data['dateEnd'];
 
-      $response = LessonModel::updateLessonDate(intval($idLesson), $formattedDateStart, $formattedDateEnd);
-      return json_encode($response);
+      $response = LessonModel::updateLessonDate($idLesson, $dateStart, $dateEnd);
+
+      if ($response) {
+        echo json_encode(['success' => true]);
+      } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Failed to update lesson']);
+      }
     } catch (\Exception $e) {
       http_response_code(500);
-      echo json_encode(['error' => 'Internal server error', 'message' => $e->getMessage()]);
+      echo json_encode(['success' => false, 'error' => 'Internal server error', 'message' => $e->getMessage()]);
     }
   }
 
@@ -74,7 +78,7 @@ class LessonController
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
       http_response_code(405);
-      echo json_encode(['error' => 'Method not allowed']);
+      echo json_encode(['success' => false, 'error' => 'Method not allowed']);
       return;
     }
 
@@ -82,7 +86,7 @@ class LessonController
 
     if (!isset($data['moduleId']) || !isset($data['dateStart']) || !isset($data['dateEnd'])) {
       http_response_code(400);
-      echo json_encode(['error' => 'Missing required parameters']);
+      echo json_encode(['success' => false, 'error' => 'Missing required parameters']);
       return;
     }
 

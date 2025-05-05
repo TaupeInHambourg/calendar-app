@@ -145,24 +145,27 @@ function handleUpdateLesson(lessonId, startDateTime, endDateTime) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      idLesson: lessonId,
       dateStart: startDateTime,
       dateEnd: endDateTime
     })
   })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      response.json()
+    })
     .then(data => {
-      console.log('Réponse mise à jour:', data);
-      if (data.success) {
+      if (!data || data.success) {
         window.location.reload();
       } else {
         alert('Erreur lors de la mise à jour: ' + (data.error || 'Erreur inconnue'));
       }
     })
-  // .catch(error => {
-  //   console.error('Erreur:', error);
-  //   alert('Une erreur est survenue lors de la mise à jour de la leçon.');
-  // });
+    .catch(error => {
+      console.error('Erreur:', error);
+      alert('Une erreur est survenue lors de la mise à jour de la leçon.');
+    });
 }
 
 export {

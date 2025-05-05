@@ -71,12 +71,17 @@ class LessonModel
     public static function updateLessonDate($lessonId, $dateStart, $dateEnd)
     {
         $db = Database::connectPDO();
+
         $query = "UPDATE lesson SET date_start = :dateStart, date_end = :dateEnd WHERE id = :lessonId";
+
         $stmt = $db->prepare($query);
         $stmt->bindParam(':lessonId', $lessonId, PDO::PARAM_INT);
         $stmt->bindParam(':dateStart', $dateStart, PDO::PARAM_STR);
         $stmt->bindParam(':dateEnd', $dateEnd, PDO::PARAM_STR);
-        return $stmt->execute();
+
+        $result = $stmt->execute();
+
+        return $result;
     }
 
     public static function createLessonFromModule($moduleId, $startDate, $endDate)
@@ -106,23 +111,6 @@ class LessonModel
         $stmt->execute();
         return $db->lastInsertId();
     }
-
-    // public static function updateLesson($lesson, $date_start, $date_end)
-    // {
-    //     $db = Database::connectPDO();
-    //     $query =
-    //         "UPDATE `lesson`
-    //         SET `date_start` = :date_start,
-    //             `date_end` = :date_end
-    //         WHERE id = :lesson";
-    //     $stmt = $db->prepare($query);
-
-    //     $stmt->bindValue(':date_start', $date_start, $date_start === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
-    //     $stmt->bindValue(':date_end', $date_end, $date_end === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
-    //     $stmt->bindValue(':id', $lesson, PDO::PARAM_INT);
-    //     $result = $stmt->fetchAll(PDO::FETCH_CLASS, 'audrey\CalendarApp\Model\LessonModel');
-    //     return $result;
-    // }
 
     public function createLesson()
     {
